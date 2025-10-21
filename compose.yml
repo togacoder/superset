@@ -1,0 +1,10 @@
+services:
+  superset:
+    image: docker.io/apache/superset:6.0.0rc2
+    container_name: superset
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./volumes/app:/app
+    environment:
+      - SUPERSET_CONFIG_PATH=/app/superset_config.py
