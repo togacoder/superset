@@ -1,10 +1,27 @@
 services:
   superset:
-    image: docker.io/apache/superset:6.0.0rc2
+    build: 
+      context: .
+      dockerfile: Containerfile
     container_name: superset
     ports:
       - "8088:8088"
     volumes:
-      - ./volumes/app:/app
+      - ./volumes/superset/app:/app
     environment:
-      - SUPERSET_CONFIG_PATH=/app/superset_config.py
+      - SUPERSET_CONFIG_PATH=/app/pythonpath/superset_config.py
+    depends_on:
+      - mysql
+  mysql:
+    image: docker.io/mysql:8.4
+    container_name: mysql
+    volumes:
+      - "./volumes/mysql:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: superset
+      MYSQL_PASSWORD: superset1234
+      MYSQL_DATABASE: superset
+      TZ: 'Asia/Tokyo'
